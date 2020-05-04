@@ -11,13 +11,24 @@ export default [
   {
     path: "/login",
     component: Login,
+    meta: {
+      isHideFooter: true,
+    },
   },
   {
     path: "/register",
     component: Register,
+    meta: {
+      isHideFooter: true,
+    },
   },
   {
-    path: "/search",
+    name: "searching",
+    path: "/search/:keyword?",
     component: Search,
+    props: (route) => ({
+      keyword3: route.params.keyword,
+      keyword4: route.query.keyword2,
+    }),
   },
 ];
