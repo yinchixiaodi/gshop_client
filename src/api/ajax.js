@@ -36,7 +36,7 @@ instance.interceptors.response.use(
     console.log("响应拦截器失败");
     // 隐藏进度条
     NProgress.done();
-    alert(`请求出错：${error.massage || "位置错误"}`);
+    alert(`请求出错：${error.massage || "未知错误"}`);
     return Promise.reject(error);
   }
 );
