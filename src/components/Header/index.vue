@@ -73,15 +73,18 @@ export default {
       // this.$router.push(
       //   `/search/${this.keyword}?keyword2=${this.keyword.toUpperCase()}`
       // );
-      this.$router.push({
+      const keyword = this.keyword;
+      const location = {
         name: "searching",
-        params: {
-          keyword: this.keyword,
-        },
-        query: {
-          keyword2: this.keyword.toUpperCase(),
-        },
-      });
+      };
+      if (keyword) {
+        location.params = { keyword };
+      }
+
+      const { query } = this.$route;
+      location.query = query;
+
+      this.$router.push(location);
     },
   },
 };

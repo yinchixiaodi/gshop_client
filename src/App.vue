@@ -23,7 +23,7 @@ export default {
     console.log(result);
     const result2 = await reqLogin("13700000000", "111111");
     console.log(result2); */
-    // this.$store.dispatch("getBaseCategoryList");
+    this.$store.dispatch("getBaseCategoryList");
   },
 };
 </script>
