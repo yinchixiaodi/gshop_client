@@ -9,6 +9,7 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { reqBanners, reqFloors } from "./api";
 // import { reqBaseCategoryList, reqLogin } from "@/api";
 export default {
   name: "App",
@@ -23,6 +24,10 @@ export default {
     console.log(result);
     const result2 = await reqLogin("13700000000", "111111");
     console.log(result2); */
+    const result = await reqBanners();
+    console.log("reqBanners:", result);
+    const result1 = await reqFloors();
+    console.log("reqFloors:", result1);
     this.$store.dispatch("getBaseCategoryList");
   },
 };

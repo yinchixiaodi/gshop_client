@@ -4,6 +4,7 @@ import router from "./router";
 // 注册store
 import store from "./store";
 import TypeNav from "@/components/TypeNav";
+import "./mock/mockServer";
 
 Vue.config.productionTip = false;
 
