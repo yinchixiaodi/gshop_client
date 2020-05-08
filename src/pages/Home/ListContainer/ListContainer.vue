@@ -3,32 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" ref="swiper">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="banner in banners"
-              :key="banner.id"
-            >
-              <img :src="banner.imgUrl" />
-            </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Carousel :carouselList="banners" />
       </div>
       <div class="right">
         <div class="news">
@@ -104,8 +79,6 @@
 </template>
 
 <script>
-import Swiper from "swiper";
-import "swiper/css/swiper.min.css";
 import { mapState } from "vuex";
 export default {
   name: "ListContainer",
@@ -117,34 +90,6 @@ export default {
       // banners已经有数据 -> 讲数据动态展示
       banners: (state) => state.home.banners,
     }),
-  },
-  watch: {
-    // 设置监视属性，当banners的值发生变化，需要在数据更新之后界面更新前我们调用
-    banners(value) {
-      this.$nextTick(() => {
-        this.initSwiper();
-      });
-    },
-  },
-  methods: {
-    initSwiper() {
-      // new Swiper(".swiper-container", {
-      new Swiper(this.$refs.swiper, {
-        // direction: "vertical", // 垂直切换选项
-        loop: true, // 循环模式选项
-
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-        },
-
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
-    },
   },
 };
 </script>
