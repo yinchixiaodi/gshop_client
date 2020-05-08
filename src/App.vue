@@ -24,10 +24,15 @@ export default {
     console.log(result);
     const result2 = await reqLogin("13700000000", "111111");
     console.log(result2); */
-    const result = await reqBanners();
+    // 测试banner和floors接口
+    /* const result = await reqBanners();
     console.log("reqBanners:", result);
     const result1 = await reqFloors();
-    console.log("reqFloors:", result1);
+    console.log("reqFloors:", result1); */
+
+    // this.$store.dispatch("getBanners");
+    // this.$store.dispatch("getFloors");
+
     this.$store.dispatch("getBaseCategoryList");
   },
 };
