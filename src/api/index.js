@@ -25,6 +25,7 @@ export function reqBanners() {
 // export const reqBanners = () => mockAjax("/banners");
 export const reqFloors = () => mockAjax("/floors");
 
+// 根据搜索的条件参数对象获取商品列表数据
 export const reqProductList = (searchParams) =>
   ajax({
     url: "/list",

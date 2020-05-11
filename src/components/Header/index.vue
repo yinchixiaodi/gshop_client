@@ -48,8 +48,7 @@
             />
             <button
               class="sui-btn btn-xlarge btn-danger"
-              type="button"
-              @click="search"
+              @click.prevent="search"
             >
               搜索
             </button>
@@ -65,8 +64,13 @@ export default {
   name: "Header",
   data() {
     return {
-      keyword: "atguigu",
+      keyword: "",
     };
+  },
+  mounted() {
+    this.$bus.$on("removeKeyword", () => {
+      this.keyword = "";
+    });
   },
   methods: {
     search() {
@@ -83,8 +87,11 @@ export default {
 
       const { query } = this.$route;
       location.query = query;
-
-      this.$router.push(location);
+      if (this.$route.name === "searching") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
 };

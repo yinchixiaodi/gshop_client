@@ -136,7 +136,11 @@ export default {
         if (keyword) {
           location.params = { keyword };
         }
-        this.$router.push(location);
+        if (this.$route.path.indexOf("/search") === 0) {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
         this.hideCategorys();
       }
     },

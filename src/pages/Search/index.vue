@@ -11,21 +11,44 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="options.categoryName">
+              {{ options.categoryName }}
+              <i @click="removeCategory">×</i>
+            </li>
+            <li class="with-x" v-if="options.keyword">
+              {{ options.keyword }}
+              <i @click="removeKeyword">×</i>
+            </li>
+            <li class="with-x" v-if="options.trademark">
+              {{ options.trademark }}
+              <i @click="removeTrademark">×</i>
+            </li>
+            <li
+              class="with-x"
+              v-for="(props, index) in options.props"
+              :key="index"
+            >
+              {{ props }}
+              <i @click="removeProps(index)">×</i>
+            </li>
           </ul>
         </div>
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :setTrademark="setTrademark" :addProps="addProps" />
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isActive('1') }" @click="setOrder('1')">
+                  <a href="#">
+                    综合
+                    <i
+                      class="iconfont"
+                      :class="orderIcon"
+                      v-show="isActive('1')"
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -36,11 +59,15 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isActive('2') }" @click="setOrder('2')">
+                  <a href="#">
+                    价格
+                    <i
+                      class="iconfont"
+                      :class="orderIcon"
+                      v-show="isActive('2')"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -118,89 +145,6 @@
           </div>
         </div>
         <!--hotsale-->
-        <div class="clearfix hot-sale">
-          <h4 class="title">热卖商品</h4>
-          <div class="hot-list">
-            <ul class="yui3-g">
-              <li class="yui3-u-1-4">
-                <div class="list-wrap">
-                  <div class="p-img">
-                    <img src="./images/like_01.png" />
-                  </div>
-                  <div class="attr">
-                    <em>Apple苹果iPhone 6s (A1699)</em>
-                  </div>
-                  <div class="price">
-                    <strong>
-                      <em>¥</em>
-                      <i>4088.00</i>
-                    </strong>
-                  </div>
-                  <div class="commit">
-                    <i class="command">已有700人评价</i>
-                  </div>
-                </div>
-              </li>
-              <li class="yui3-u-1-4">
-                <div class="list-wrap">
-                  <div class="p-img">
-                    <img src="./images/like_03.png" />
-                  </div>
-                  <div class="attr">
-                    <em>金属A面，360°翻转，APP下单省300！</em>
-                  </div>
-                  <div class="price">
-                    <strong>
-                      <em>¥</em>
-                      <i>4088.00</i>
-                    </strong>
-                  </div>
-                  <div class="commit">
-                    <i class="command">已有700人评价</i>
-                  </div>
-                </div>
-              </li>
-              <li class="yui3-u-1-4">
-                <div class="list-wrap">
-                  <div class="p-img">
-                    <img src="./images/like_04.png" />
-                  </div>
-                  <div class="attr">
-                    <em>256SSD商务大咖，完爆职场，APP下单立减200</em>
-                  </div>
-                  <div class="price">
-                    <strong>
-                      <em>¥</em>
-                      <i>4068.00</i>
-                    </strong>
-                  </div>
-                  <div class="commit">
-                    <i class="command">已有20人评价</i>
-                  </div>
-                </div>
-              </li>
-              <li class="yui3-u-1-4">
-                <div class="list-wrap">
-                  <div class="p-img">
-                    <img src="./images/like_02.png" />
-                  </div>
-                  <div class="attr">
-                    <em>Apple苹果iPhone 6s (A1699)</em>
-                  </div>
-                  <div class="price">
-                    <strong>
-                      <em>¥</em>
-                      <i>4088.00</i>
-                    </strong>
-                  </div>
-                  <div class="commit">
-                    <i class="command">已有700人评价</i>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -220,11 +164,12 @@ export default {
         category2Id: "",
         category3Id: "",
         keyword: "",
-        order: "1:desc",
+        // order: "1:desc",
+        order: "2:asc",
         pageNo: 1,
         pageSize: 10,
         props: [],
-        trademark: "",
+        // trademark: "",
       },
     };
   },
@@ -232,6 +177,9 @@ export default {
     ...mapState({
       productList: (state) => state.search.productList,
     }),
+    orderIcon() {
+      return this.options.order.split(":")[1] === "asc" ? "iconup" : "icondown";
+    },
   },
   beforeMount() {
     this.updatedOptins();
@@ -250,6 +198,29 @@ export default {
     this.$store.dispatch("getProductList", this.options);
   },
   methods: {
+    // 判断当前是综合排序还是价格排序
+    isActive(flag) {
+      return this.options.order.indexOf(flag) === 0;
+    },
+    // 点击切换排序项，如果点击的是当前按钮，则排序顺序改变，
+    // 如果点击的不是当前按钮，则点击的按钮降序排序，加active类
+    // order: orderFlag:orderType
+    setOrder(flag) {
+      // 得到原来的 orderFlag 和 orderType
+      let [orderFlag, orderType] = this.options.order.split(":");
+      if (flag === orderFlag) {
+        // orderType = flag;
+        orderType = orderType === "asc" ? "desc" : "asc";
+        // console.log(orderType);
+      } else {
+        orderFlag = flag;
+        orderType = "desc";
+      }
+      this.options.order = orderFlag + ":" + orderType;
+      // console.log(this.options.order);
+      this.$store.dispatch("getProductList", this.options);
+    },
+    // 获取更新后的参数
     updatedOptins() {
       const {
         categoryName,
@@ -257,7 +228,7 @@ export default {
         category2Id,
         category3Id,
       } = this.$route.query;
-      const keyword = this.$route.params;
+      const { keyword } = this.$route.params;
       this.options = {
         ...this.options,
         categoryName,
@@ -266,6 +237,53 @@ export default {
         category3Id,
         keyword,
       };
+    },
+    // 移出分类的搜索条件
+    removeCategory() {
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+      // 重新跳转到当前路由，不在携带query参数，只携带params参数
+      this.$router.replace(this.$route.path);
+      // this.$store.dispatch("getProductList", this.options);
+    },
+    // 移出关键字的搜索条件
+    removeKeyword() {
+      this.options.keyword = "";
+      // 重新跳转到当前路由，不在携带 params 参数，只携带 query 参数
+      this.$router.replace({ name: "searching", query: this.$route.query });
+      // this.$store.dispatch("getProductList", this.options);
+      this.$bus.$emit("removeKeyword");
+    },
+    // 移出分类的搜索条件
+    removeTrademark() {
+      // this.options.trademark = "";
+      this.$delete(this.options, "trademark");
+      this.$store.dispatch("getProductList", this.options);
+    },
+    //
+    removeProps(index) {
+      this.options.props.splice(index, 1);
+      this.$store.dispatch("getProductList", this.options);
+    },
+    // props 函数 , 根据子组件传递过来的参数，设置trademark的值
+    setTrademark(trademark) {
+      //更新options里面的trademark的值
+      /* this.options.trademark = trademark;
+      this.$store.dispatch("getProductList", this.options); */
+      // 往options里面添加一个新属性 trademark
+      if (this.options.hasOwnProperty("trademark")) {
+        this.options.trademark = trademark;
+      } else {
+        this.$set(this.options, "trademark", trademark);
+      }
+      this.$store.dispatch("getProductList", this.options);
+    },
+    //["属性ID:属性值:属性名"]
+    addProps(attrId, item, attrName) {
+      this.options.props.push(`${attrId}:${item}:${attrName}`);
+      this.$store.dispatch("getProductList", this.options);
     },
   },
   watch: {
@@ -560,71 +578,6 @@ export default {
             font-size: 14px;
             float: right;
             width: 241px;
-          }
-        }
-      }
-    }
-    .hot-sale {
-      margin-bottom: 5px;
-      border: 1px solid #ddd;
-      .title {
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 21px;
-        border-bottom: 1px solid #ddd;
-        background: #f1f1f1;
-        color: #333;
-        margin: 0;
-        padding: 5px 0 5px 15px;
-      }
-      .hot-list {
-        padding: 15px;
-        ul {
-          display: flex;
-          li {
-            width: 25%;
-            height: 100%;
-            .list-wrap {
-              .p-img,
-              .price,
-              .attr,
-              .commit {
-                padding-left: 15px;
-              }
-              .p-img {
-                img {
-                  max-width: 100%;
-                  vertical-align: middle;
-                  border: 0;
-                }
-              }
-              .attr {
-                width: 85%;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
-                overflow: hidden;
-                margin-bottom: 8px;
-                min-height: 38px;
-                cursor: pointer;
-                line-height: 1.8;
-              }
-              .price {
-                font-size: 18px;
-                color: #c81623;
-                strong {
-                  font-weight: 700;
-                  i {
-                    margin-left: -5px;
-                  }
-                }
-              }
-              .commit {
-                height: 22px;
-                font-size: 13px;
-                color: #a7a7a7;
-              }
-            }
           }
         }
       }
