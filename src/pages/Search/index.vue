@@ -81,9 +81,12 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:;">
+                    <!-- <a href="javascript:;">
                       <img :src="goods.defaultImg" />
-                    </a>
+                    </a> -->
+                    <router-link :to="`/detail/${goods.id}`">
+                      <img :src="goods.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -114,35 +117,17 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- currentPage: 当前页码
+            pageSize: 每页数量
+            total: 总数量
+            showPageNo: 连续数码数 -->
+          <Pagination
+            :currentPage="options.pageNo"
+            :pageSize="options.pageSize"
+            :total="productList.total"
+            :showPageNo="5"
+            @currentChange="handlCurrentChange"
+          />
         </div>
         <!--hotsale-->
       </div>
@@ -167,7 +152,7 @@ export default {
         // order: "1:desc",
         order: "2:asc",
         pageNo: 1,
-        pageSize: 10,
+        pageSize: 5,
         props: [],
         // trademark: "",
       },
@@ -195,9 +180,23 @@ export default {
       props: ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"],
       trademark: "4:小米",
     }); */
-    this.$store.dispatch("getProductList", this.options);
+    // this.$store.dispatch("getProductList", this.options);
+    this.getProductList();
   },
   methods: {
+    // 当点击上面的分类选项的时候，子组件显示的页数应该是第一页
+    getProductList(pageNo = 1) {
+      this.options.pageNo = pageNo;
+      this.$store.dispatch("getProductList", this.options);
+    },
+    // 当前页码发生改变时，的事件监听回调函数
+    handlCurrentChange(page) {
+      // 将显示的信息为当前最新页数应该显示的信息
+      this.options.pageNo = page;
+      // 重新发送请求
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList(page);
+    },
     // 判断当前是综合排序还是价格排序
     isActive(flag) {
       return this.options.order.indexOf(flag) === 0;
@@ -218,7 +217,8 @@ export default {
       }
       this.options.order = orderFlag + ":" + orderType;
       // console.log(this.options.order);
-      this.$store.dispatch("getProductList", this.options);
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
     // 获取更新后的参数
     updatedOptins() {
@@ -260,12 +260,14 @@ export default {
     removeTrademark() {
       // this.options.trademark = "";
       this.$delete(this.options, "trademark");
-      this.$store.dispatch("getProductList", this.options);
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
     //
     removeProps(index) {
       this.options.props.splice(index, 1);
-      this.$store.dispatch("getProductList", this.options);
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
     // props 函数 , 根据子组件传递过来的参数，设置trademark的值
     setTrademark(trademark) {
@@ -278,18 +280,21 @@ export default {
       } else {
         this.$set(this.options, "trademark", trademark);
       }
-      this.$store.dispatch("getProductList", this.options);
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
     //["属性ID:属性值:属性名"]
     addProps(attrId, item, attrName) {
       this.options.props.push(`${attrId}:${item}:${attrName}`);
-      this.$store.dispatch("getProductList", this.options);
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
   },
   watch: {
     $route() {
       this.updatedOptins();
-      this.$store.dispatch("getProductList", this.options);
+      // this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
   },
   components: {
