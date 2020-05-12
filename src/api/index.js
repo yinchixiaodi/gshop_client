@@ -42,3 +42,13 @@ export const reqProductList = (searchParams) =>
   props: ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"],
   trademark: "4:小米",
 }); */
+// 根据点击的商品动态显示商品信息
+export const reqDetail = (skuId) => {
+  return ajax(`/item/${skuId}`);
+};
+
+// 添加购物车
+// /api/cart/addToCart/{ skuId }/{ skuNum }
+export const reqAddToCart = (skuId, skuNum) => {
+  return ajax.post(`/cart/addToCart/${skuId}/${skuNum}`);
+};

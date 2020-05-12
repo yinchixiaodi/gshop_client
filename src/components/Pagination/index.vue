@@ -110,6 +110,8 @@ export default {
   },
   methods: {
     setCurrentPage(page) {
+      if (this.myCurrentPage === page) return;
+
       this.myCurrentPage = page;
       // 当子组件的页码发生变化时，要将最新的页码传递给父组件，使用自定义事件
       this.$emit("currentChange", page);
