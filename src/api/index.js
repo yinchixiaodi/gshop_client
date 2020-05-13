@@ -60,10 +60,10 @@ export const reqCartList = () => ajax("/cart/cartList");
 // 切换商品选中状态  isChecked 1代表选中， 0代表取消选中
 /* /api/cart/checkCart/{skuID}/{isChecked}
  */
-export const reqCheckCart = (skuID, isChecked) =>
+export const reqCheckCartItem = (skuID, isChecked) =>
   ajax(`/cart/checkCart/${skuID}/${isChecked}`);
 
 // 删除购物车商品
 /* /api/cart/deleteCart/{skuId} */
-export const reqDeleteCart = (skuId) =>
+export const reqDeleteCartItem = (skuId) =>
   ajax.delete(`/cart/deleteCart/${skuId}`);
