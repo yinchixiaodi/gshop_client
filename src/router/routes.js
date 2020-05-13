@@ -3,6 +3,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Search from "@/pages/Search";
 import Detail from "@/pages/Detail";
+import AddCartSuccess from "@/pages/AddCartSuccess";
 
 export default [
   {
@@ -36,5 +37,9 @@ export default [
     name: "detail",
     path: "/detail/:skuId",
     component: Detail,
+  },
+  {
+    path: "/addCartSuccess",
+    component: AddCartSuccess,
   },
 ];

@@ -111,6 +111,7 @@
               </div>
               <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
+                <!-- <router-link to="`/addCartSuccess`">加入购物车</router-link> -->
               </div>
             </div>
           </div>
@@ -408,7 +409,16 @@ export default {
       } */
       try {
         await this.$store.dispatch("getAddToCart3", { skuId, skuNum });
-        alert("添加购物车成功！");
+        // 添加购物车成功，将skuInfo保存
+        window.sessionStorage.setItem(
+          "SAVE_SKUINFO",
+          JSON.stringify(this.skuInfo)
+        );
+        // alert("添加购物车成功！");
+        this.$router.push({
+          path: "/addCartSuccess",
+          query: { skuNum },
+        });
       } catch (error) {
         alert(error.message);
       }
