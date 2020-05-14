@@ -94,13 +94,16 @@ const actions = {
     }
   },
   // 删除已选中的
-  async deleteAllChange({ commit, state, dispatch }) {
+  async deleteAllCheck({ state, dispatch }) {
     //   遍历所有的item，查看选中的
-    state.cartList.forEach((item) => {
+
+    const promises = state.cartList.reduce((pre, item) => {
       if (item.isChecked === 1) {
-        dispatch("deleteCartItem", { skuId: item.skuId });
+        pre.push(dispatch("deleteCartItem", { skuId: item.skuId }));
       }
-    });
+      return pre;
+    }, []);
+    return Promise.all(promises);
   },
 };
 

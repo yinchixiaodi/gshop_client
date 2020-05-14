@@ -171,17 +171,25 @@ export default {
       }
     },
     async isDelectItem(item) {
-      try {
-        await this.$store.dispatch("deleteCartItem", { skuId: item.skuId });
-        // 删除成功后，重新读取购物车中的数据
-        this.$store.dispatch("getCartList");
-      } catch (error) {
-        alert(error.message);
+      if (window.confirm("确定要删除该的商品吗?")) {
+        try {
+          await this.$store.dispatch("deleteCartItem", { skuId: item.skuId });
+          // 删除成功后，重新读取购物车中的数据
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
       }
     },
-    deleteCheckItem() {
-      this.$store.dispatch("deleteAllChange");
-      this.$store.dispatch("getCartList");
+    async deleteCheckItem() {
+      if (window.confirm("确定要删除所选的商品吗?")) {
+        try {
+          await this.$store.dispatch("deleteAllCheck");
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
+      }
     },
   },
 };
