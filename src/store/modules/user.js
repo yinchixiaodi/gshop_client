@@ -1,8 +1,8 @@
-import { getUsertempId } from "@/utils";
+import { getUsertempId, saveUserInfo, getUserInfo } from "@/utils";
 import { reqRegister, reqLogin } from "@/api";
 export default {
   state: {
-    userInfo: {},
+    userInfo: getUserInfo(),
     userTempId: getUsertempId(),
   },
   mutations: {
@@ -24,6 +24,8 @@ export default {
       if (result.code === 200) {
         const userInfo = result.data;
         commit("RECEIVE_USER_INFO", userInfo);
+        // 登录成功后将用户信息保存到localStorage
+        saveUserInfo(userInfo);
       } else {
         throw new Error(result.data || result.message || "注册失败");
       }

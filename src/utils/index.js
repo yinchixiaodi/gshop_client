@@ -12,3 +12,13 @@ export function getUsertempId() {
   }
   return userTempId;
 }
+
+// 保存用户的登录信息
+export const saveUserInfo = (userInfo) => {
+  window.localStorage.setItem("USER_INFO", JSON.stringify(userInfo));
+};
+
+// 读取用户信息
+export const getUserInfo = () => {
+  return JSON.parse(window.localStorage.getItem("USER_INFO")) || {};
+};

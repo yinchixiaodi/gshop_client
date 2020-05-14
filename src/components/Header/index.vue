@@ -6,14 +6,17 @@
         <div class="container">
           <div class="loginList">
             <p>尚品汇欢迎您！</p>
-            <p>
+            <p v-if="userInfo.name">
+              <span>{{ userInfo.nickName }}</span>
+              &nbsp;
+              <a href="javascript:;">退出登录</a>
+            </p>
+            <p v-else>
               <span>请</span>
               <router-link to="/login">登录</router-link>
               <router-link class="register" to="/register">
                 免费注册
               </router-link>
-              <!-- <a href="###">登录</a> -->
-              <!-- <a href="###" class="register">免费注册</a> -->
             </p>
           </div>
           <div class="typeList">
@@ -60,12 +63,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Header",
   data() {
     return {
       keyword: "",
     };
+  },
+  computed: {
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+    }),
   },
   mounted() {
     this.$bus.$on("removeKeyword", () => {
