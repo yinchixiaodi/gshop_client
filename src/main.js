@@ -9,6 +9,7 @@ import Pagination from "@/components/Pagination";
 import "./mock/mockServer";
 import "swiper/css/swiper.min.css";
 import * as API from "@/api";
+import "./validate";
 Vue.config.productionTip = false;
 
 // 注册全局组件

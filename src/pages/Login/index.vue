@@ -16,20 +16,49 @@
           <div class="content">
             <form action="##" @submit.prevent="login">
               <div class="input-text clearFix">
-                <span></span>
-                <input
+                <!-- <span></span> -->
+                <em></em>
+                <!-- <input
                   type="text"
                   placeholder="邮箱/用户名/手机号"
                   v-model="mobile"
-                />
+                /> -->
+                <ValidationProvider
+                  name="手机号"
+                  :rules="{ required: true, regex: /^1\d{10}$/ }"
+                >
+                  <template slot-scope="{ errors, classes }">
+                    <input
+                      type="text"
+                      placeholder="邮箱/用户名/手机号"
+                      v-model="mobile"
+                      :class="classes"
+                    />
+                    <span class="error-msg">{{ errors[0] }}</span>
+                  </template>
+                </ValidationProvider>
               </div>
               <div class="input-text clearFix">
-                <span class="pwd"></span>
-                <input
+                <em class="pwd"></em>
+                <!-- <input
                   type="text"
                   placeholder="请输入密码"
                   v-model="password"
-                />
+                /> -->
+                <ValidationProvider
+                  name="密码"
+                  :rules="{ required: true, min: 6, max: 10 }"
+                >
+                  <template slot-scope="{ errors, classes }">
+                    <input
+                      type="password"
+                      placeholder="请输入密码"
+                      v-model="password"
+                      :class="classes"
+                    />
+                    <span class="error-msg">{{ errors[0] }}</span>
+                  </template>
+                </ValidationProvider>
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -168,8 +197,9 @@ export default {
 
           .input-text {
             margin-bottom: 16px;
+            position: relative;
 
-            span {
+            em {
               float: left;
               width: 37px;
               height: 32px;
@@ -183,22 +213,40 @@ export default {
               background-position: -72px -201px;
             }
 
-            input {
-              width: 302px;
-              height: 32px;
-              box-sizing: border-box;
-              border: 1px solid #ccc;
-              border-left: none;
-              float: left;
-              padding-top: 6px;
-              padding-bottom: 6px;
-              font-size: 14px;
-              line-height: 22px;
-              padding-right: 8px;
-              padding-left: 8px;
+            // input {
+            //   width: 302px;
+            //   height: 32px;
+            //   box-sizing: border-box;
+            //   border: 1px solid #ccc;
+            //   // border-left: none;
+            //   float: left;
+            //   padding-top: 6px;
+            //   padding-bottom: 6px;
+            //   font-size: 14px;
+            //   line-height: 22px;
+            //   padding-right: 8px;
+            //   padding-left: 8px;
 
-              border-radius: 0 2px 2px 0;
+            //   border-radius: 0 2px 2px 0;
+            //   outline: none;
+            // }
+            input {
+              width: 270px;
+              height: 38px;
+              padding-left: 8px;
+              box-sizing: border-box;
+              margin-left: 5px;
               outline: none;
+              border: 1px solid #999;
+              &.is-invalid {
+                border: 1px solid red;
+              }
+            }
+            .error-msg {
+              position: absolute;
+              top: 100%;
+              left: 50px;
+              color: red;
             }
           }
 
