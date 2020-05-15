@@ -85,3 +85,6 @@ export function reqRegister(userInfo) {
 export const reqLoginOut = () => {
   return ajax("/user/passport/logout");
 };
+
+// 获取我的订单列表 /api/order/auth/{page}/{limit}
+export const reqMyOrder = (page, limit) => ajax(`/order/auth/${page}/${limit}`);
