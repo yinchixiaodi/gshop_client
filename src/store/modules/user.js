@@ -1,5 +1,10 @@
-import { getUsertempId, saveUserInfo, getUserInfo } from "@/utils";
-import { reqRegister, reqLogin } from "@/api";
+import {
+  getUsertempId,
+  saveUserInfo,
+  getUserInfo,
+  removeUserInfo,
+} from "@/utils";
+import { reqRegister, reqLogin, reqLoginOut } from "@/api";
 export default {
   state: {
     userInfo: getUserInfo(),
@@ -8,6 +13,9 @@ export default {
   mutations: {
     RECEIVE_USER_INFO(state, userInfo) {
       state.userInfo = userInfo;
+    },
+    RECEIVE_REMOVE_USER_INFO(state) {
+      state.userInfo = {};
     },
   },
   actions: {
@@ -28,6 +36,18 @@ export default {
         saveUserInfo(userInfo);
       } else {
         throw new Error(result.data || result.message || "注册失败");
+      }
+    },
+    // 退出登录的异步 action
+    async loginOut({ commit }) {
+      const result = await reqLoginOut();
+      if (result.code === 200) {
+        // 清除vuex里的用户信息
+        commit("RECEIVE_REMOVE_USER_INFO");
+        // 清除用户信息
+        removeUserInfo();
+      } else {
+        throw new Error(result.message || "退出失败");
       }
     },
   },

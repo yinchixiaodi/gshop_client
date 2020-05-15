@@ -9,7 +9,7 @@
             <p v-if="userInfo.name">
               <span>{{ userInfo.nickName }}</span>
               &nbsp;
-              <a href="javascript:;">退出登录</a>
+              <a href="javascript:;" @click="loginOut">退出登录</a>
             </p>
             <p v-else>
               <span>请</span>
@@ -100,6 +100,17 @@ export default {
         this.$router.replace(location);
       } else {
         this.$router.push(location);
+      }
+    },
+    async loginOut() {
+      if (window.confirm("确定要退出登录吗?")) {
+        try {
+          await this.$store.dispatch("loginOut");
+          // localStorage.clear();
+          // this.$router.replace("/");
+        } catch (error) {
+          alert(error.message);
+        }
       }
     },
   },

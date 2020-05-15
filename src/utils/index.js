@@ -22,3 +22,8 @@ export const saveUserInfo = (userInfo) => {
 export const getUserInfo = () => {
   return JSON.parse(window.localStorage.getItem("USER_INFO")) || {};
 };
+
+// 清除用户信息
+export const removeUserInfo = () => {
+  localStorage.removeItem("USER_INFO");
+};
