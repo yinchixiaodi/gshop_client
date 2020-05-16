@@ -100,6 +100,7 @@ export default [
         next("/shopcart");
       }
     },
+    props: (route) => ({ orderId: route.query.orderId }),
   },
   {
     path: "/paysuccess",

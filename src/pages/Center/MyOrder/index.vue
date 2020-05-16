@@ -92,6 +92,17 @@
       :total="total"
       @currentChange="getMyorder"
     />
+    <el-pagination
+      background
+      layout="prev, pager, next,total"
+      :total="total"
+      :page-size="pageSize"
+      :pager-count="7"
+      :current-page="currentPage"
+      @current-change="getMyorder"
+      prev-text="上一页"
+      next-text="下一页"
+    ></el-pagination>
   </div>
 </template>
 

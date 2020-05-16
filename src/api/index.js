@@ -88,3 +88,23 @@ export const reqLoginOut = () => {
 
 // 获取我的订单列表 /api/order/auth/{page}/{limit}
 export const reqMyOrder = (page, limit) => ajax(`/order/auth/${page}/${limit}`);
+
+// 获取订单交易页信息  /api/order/auth/trade GET
+export const reqTradeInfo = () => ajax("/order/auth/trade");
+
+// 提交订单  /api/order/auth/submitOrder?tradeNo={tradeNo} POST
+export const reqSubmitOrder = (tradeNo, orderInfo) =>
+  ajax({
+    url: "/order/auth/submitOrder",
+    method: "POST",
+    params: { tradeNo },
+    data: orderInfo, //订单信息  请求体数据
+  });
+
+// 获取订单支付信息  /api/payment/weixin/createNative/{orderId} GET
+export const reqPayInfo = (orderId) =>
+  ajax(`/payment/weixin/createNative/${orderId}`);
+
+// 查询支付订单状态  /api/payment/weixin/queryPayStatus/{orderId}  GET
+export const reqOrderStatus = (orderId) =>
+  ajax(`/payment/weixin/queryPayStatus/${orderId}`);
